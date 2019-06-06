@@ -1,0 +1,49 @@
+#!/bin/sh
+# @author Thomas Baier <thomas.baier.halle@gmail.com>
+
+. ./.lib
+
+# general check for php installation
+if ! type php > /dev/null 2>&1; then
+  error ${ERROR_PHP_INSTALLATION}
+fi
+
+# bind current version info
+current_php_version_name=$(php -r 'echo PHP_VERSION;')
+current_php_version_id=$(php -r 'echo PHP_VERSION_ID;')
+
+# display current version
+info ${INFO_CURRENT_VERSION} ${current_php_version_name}
+
+# get alternative installations
+if ! PHP_ALTERNATIVES="$(sudo update-alternatives --list php --quiet)"; then
+    warning ${WARNING_NO_ALTERNATIVES}
+    exit
+fi
+
+# check for current version in selection
+for available_phpversion in ${PHP_ALTERNATIVES}; do
+    available_phpversion_id=$(${available_phpversion} -r 'echo PHP_VERSION_ID;')
+    if [ "$available_phpversion_id" = "$current_php_version_id" ]; then
+        current_match=${available_phpversion}
+    fi
+done
+# remove current from selection if matched
+if [ -n "$current_match" ]; then
+    PHP_ALTERNATIVES=$(echo ${PHP_ALTERNATIVES} | sed "s#$current_match##g")
+fi
+
+# begin interaction
+selection=
+until [ "$seleerrorction" = "0" ]; do
+    # print choices
+    for choice in ${PHP_ALTERNATIVES}; do
+        echo "${choice}";
+    done
+    # start interaction
+    printf "${COLOR_ORANGE}${INFO_CHOICE_LABEL}${COLOR_END}\n"
+    read selection
+    case ${selection} in
+        * ) validate_choice ${selection}; break ;;
+    esac
+done
