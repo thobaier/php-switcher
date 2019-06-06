@@ -1,11 +1,13 @@
 #!/bin/sh
-# @author Thomas Baier <thomas.baier.halle@gmail.com>
+# @author   Thomas Baier <thomas.baier.halle@gmail.com>
+# @license  MIT
 
-# --- textes --- #
+# --- texts --- #
 INFO_CURRENT_VERSION='Current PHP version:'
 INFO_CHOICE_LABEL='Choose binary to switch to:'
-WARNING_NO_ALTERNATIVES='No alternative PHP installation found!'
 SUCCESS_SWITCHED='Successfully switched to PHP-Binary'
+ERROR_NO_BINARIES='No PHP binaries found!'
+ERROR_NO_ALTERNATIVE_BINARIES='No alternative PHP binaries found!'
 ERROR_PHP_INSTALLATION='No PHP installation found!'
 ERROR_UNKNOWN_OPTION='Option does not exist!'
 # colors
@@ -21,23 +23,15 @@ error () {
   printf "${COLOR_RED}ERROR:${COLOR_END} $*\n"
   exit 1
 }
-warning () {
-  printf "${COLOR_ORANGE}WARNING:${COLOR_END} $*\n"
-}
 info () {
   printf "${COLOR_BLUE}INFO:${COLOR_END} $*\n"
 }
-success () {
-  printf "${COLOR_GREEN}INFO:${COLOR_END} $*\n"
-}
 validate_choice () {
-    count_choices=$(echo "$PHP_ALTERNATIVES" | wc -w)
-    # check if option is number
     case $1 in
     ''|*[!0-9]*) error ${ERROR_UNKNOWN_OPTION} ;;
     esac
-    # compare choice count
-    if [ "$1" -gt "$count_choices" ]; then
+    # compare choice range with input
+    if [ "$1" -gt "$CHOICES_COUNT" ]; then
        error ${ERROR_UNKNOWN_OPTION}
     fi
     change_php_version $1
