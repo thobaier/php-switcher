@@ -1,23 +1,40 @@
 # Linux PHP-Switcher
 Locates and lists the currently installed PHP-Versions of a Linux and let's you switch between them.
 
-Usage:
+### Usage:
 ```bash
 sh ./phpswitcher
 # or
 bash ./phpswitcher
 ```
+  
+---
+  
+### Global usage:
+```bash
+# Add to your `~/.profile`|`~/.bashrc`|`~/.zshrc` file
+export PATH="/path/to/phpswitcher:$PATH"
 
-Requirements:
+# make the binary executable
+chmod +x /path/to/phpswitcher
+```
+   
+  ---
+   
+### Requirements:
 - sudo privileges
 - update-alternatives
 - sed
-
-Compatibility:
+   
+  ---
+  
+### Compatibility:
 - Shell
 - Bash
-
-Tested:
+   
+  ---
+      
+### Tested:
 - Ubuntu Terminal
 - ZSH
 - Terminator

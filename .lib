@@ -26,6 +26,9 @@ error () {
 info () {
   printf "${COLOR_BLUE}INFO:${COLOR_END} $*\n"
 }
+success () {
+  printf "${COLOR_GREEN}INFO:${COLOR_END} $*\n"
+}
 validate_choice () {
     case $1 in
     ''|*[!0-9]*) error ${ERROR_UNKNOWN_OPTION} ;;
